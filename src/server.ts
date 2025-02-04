@@ -86,6 +86,24 @@ app.get('/', async (req: FastifyRequest, reply: FastifyReply) => {
   return reply.sendFile('index.html')
 })
 
-app.listen({ port: 3001, host: '0.0.0.0' }, () => {
-  console.log('Server running on 3001, http://localhost:3001')
-})
+const port = Number(process.env.PORT) || 3001
+
+interface ServerOptions {
+  port: number;
+  host: string;
+}
+
+const serverOptions: ServerOptions = {
+  port,
+  host: '0.0.0.0',
+};
+
+app.listen(serverOptions, (err: Error | null, address: string) => {
+  if (err) {
+    
+    app.log.error(err);
+    process.exit(1);
+
+  }
+  console.log(`Server running on ${port}, http://localhost:${port}`);
+});
